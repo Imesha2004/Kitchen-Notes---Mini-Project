@@ -48,6 +48,116 @@
     </div>
 </nav>
 
+<!-- Main Landing Content -->
+<main class="container py-4">
+    <!-- Hero / Rotator Section -->
+    <section class="hero-section text-center my-3">
+        <h1 class="display-5 fw-bold text-dark mb-2">What's cooking today?</h1>
+        <p class="lead text-muted mb-4">Discover, save, and share your favorite dishes.</p>
+
+        <!-- Search Bar -->
+        <div class="search-box-container mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 rounded-start-pill ps-3">
+                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                </span>
+                <input type="text" id="recipeSearchInput" class="form-control search-input-lg border-start-0 rounded-end-pill" placeholder="Search Bar: search by title or category...">
+            </div>
+        </div>
+
+        <!-- Featured Image Rotator / Carousel Slider -->
+        <div id="recipeCarousel" class="carousel slide rotator-banner shadow-sm mb-4" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#recipeCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#recipeCarousel" data-bs-slide-to="1"></button>
+            </div>
+            <div class="carousel-inner rounded-3" style="max-height: 260px;">
+                <div class="carousel-item active text-white py-5" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80') center/cover;">
+                    <div class="py-4">
+                        <h3 class="fw-bold">Explore Handpicked Gourmet Recipes</h3>
+                        <p>Share your culinary creations with the community</p>
+                    </div>
+                </div>
+                <div class="carousel-item text-white py-5" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1200&q=80') center/cover;">
+                    <div class="py-4">
+                        <h3 class="fw-bold">Easy 15-Minute Meals for Busy Home Cooks</h3>
+                        <p>Filter by prep time and dietary preferences</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#recipeCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#recipeCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Quick-Toggle Category Filter Chips -->
+    <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 mb-4">
+        <button class="filter-chip active" data-category="All">All</button>
+        <button class="filter-chip" data-category="Italian">Italian</button>
+        <button class="filter-chip" data-category="Breakfast">Breakfast</button>
+        <button class="filter-chip" data-category="Asian">Asian</button>
+        <button class="filter-chip" data-category="Dessert">Dessert</button>
+    </div>
+
+    <!-- Responsive 3-Column Grid -->
+    <div class="recipe-grid" id="recipeContainer">
+        <!-- Recipe Card 1 -->
+        <div class="recipe-card recipe-card-item" data-title="Creamy Pasta Carbonara" data-category="Italian">
+            <div class="recipe-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=600&q=80" alt="Pasta Carbonara">
+                <span class="badge-time"><i class="fa-regular fa-clock me-1"></i> 25 min</span>
+            </div>
+            <div class="p-3">
+                <span class="badge bg-light text-primary border mb-2">Italian</span>
+                <h5 class="fw-bold text-dark mb-1">Creamy Pasta Carbonara</h5>
+                <p class="text-muted small mb-3">Traditional Italian pasta dish made with crispy bacon, eggs, and freshly grated parmesan cheese.</p>
+                <div class="d-flex align-items-center justify-content-between pt-2 border-top">
+                    <span class="small text-secondary"><i class="fa-solid fa-user-ninja me-1"></i> Amalka Udayasiri</span>
+                    <span class="small text-primary fw-semibold">4 Servings</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipe Card 2 -->
+        <div class="recipe-card recipe-card-item" data-title="Avocado Toast with Egg" data-category="Breakfast">
+            <div class="recipe-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80" alt="Avocado Toast">
+                <span class="badge-time"><i class="fa-regular fa-clock me-1"></i> 10 min</span>
+            </div>
+            <div class="p-3">
+                <span class="badge bg-light text-primary border mb-2">Breakfast</span>
+                <h5 class="fw-bold text-dark mb-1">Avocado Toast with Egg</h5>
+                <p class="text-muted small mb-3">Crispy sourdough toast topped with mashed avocado, poached egg, and red pepper flakes.</p>
+                <div class="d-flex align-items-center justify-content-between pt-2 border-top">
+                    <span class="small text-secondary"><i class="fa-solid fa-user-ninja me-1"></i> Imesha Abesingha</span>
+                    <span class="small text-primary fw-semibold">2 Servings</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recipe Card 3 -->
+        <div class="recipe-card recipe-card-item" data-title="Spicy Chicken Ramen" data-category="Asian">
+            <div class="recipe-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80" alt="Chicken Ramen">
+                <span class="badge-time"><i class="fa-regular fa-clock me-1"></i> 35 min</span>
+            </div>
+            <div class="p-3">
+                <span class="badge bg-light text-primary border mb-2">Asian</span>
+                <h5 class="fw-bold text-dark mb-1">Spicy Chicken Ramen</h5>
+                <p class="text-muted small mb-3">Rich chicken broth served with ramen noodles, tender chicken slice, soft-boiled egg, and scallions.</p>
+                <div class="d-flex align-items-center justify-content-between pt-2 border-top">
+                    <span class="small text-secondary"><i class="fa-solid fa-user-ninja me-1"></i> Amalka Udayasiri</span>
+                    <span class="small text-primary fw-semibold">2 Servings</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
 <!-- Footer -->
 <footer class="footer-custom mt-5 py-4 bg-light border-top text-center text-muted">
     <div class="container">
@@ -59,6 +169,6 @@
 <!-- Bootstrap 5 Bundle JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Custom JavaScript -->
-<script src=""></script>
+<script src="js/main.js"></script>
 </body>
 </html>
