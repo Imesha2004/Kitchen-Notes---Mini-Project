@@ -81,3 +81,36 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.closest('.dynamic-item-row').remove();
         }
     });
+
+    // 3. Real-time Form Validation (Registration & Login & Contact)
+    const validateForms = document.querySelectorAll('.needs-js-validation');
+    validateForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            const inputs = form.querySelectorAll('[required]');
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+
+                if (input.type === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(input.value)) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    }
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please correct the highlighted errors before submitting.');
+            }
+        });
+    });
+
+});
