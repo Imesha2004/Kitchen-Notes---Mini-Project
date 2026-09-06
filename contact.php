@@ -1,3 +1,87 @@
+<?php
+require_once 'includes/db.php';
+require_once 'includes/functions.php';
+
+$msg_success = '';
+$msg_error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = sanitize_input($_POST['name'] ?? '');
+    $email = sanitize_input($_POST['email'] ?? '');
+    $message = sanitize_input($_POST['message'] ?? '');
+
+    if (!empty($name) && !empty($email) && !empty($message)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            try {
+                // Prepared statement to insert query into messages table
+                $stmt = $pdo->prepare("INSERT INTO messages (name, email, message) VALUES (?, ?, ?)");
+                $stmt->execute([$name, $email, $message]);
+                $msg_success = "Thank you! Your message has been sent successfully.";
+            } catch (PDOException $e) {
+                $msg_error = "Failed to send message: " . $e->getMessage();
+            }
+        } else {
+            $msg_error = "Invalid email format.";
+        }
+    } else {
+        $msg_error = "Please complete all required fields.";
+    }
+}
+
+include 'includes/header.php';
+?>
+
+<main class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="form-card shadow-sm">
+                <h3 class="fw-bold mb-1 text-center">Contact Us</h3>
+                <p class="text-muted small text-center mb-4">Have questions or feedback? Send us a message below.</p>
+
+                <?php if ($msg_success): ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fa-solid fa-circle-check me-2"></i> <?= $msg_success ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($msg_error): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fa-solid fa-circle-exclamation me-2"></i> <?= $msg_error ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <form action="contact.php" method="POST" class="needs-js-validation">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Full Name *</label>
+                        <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+                        <div class="invalid-feedback">Please provide your name.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email Address *</label>
+                        <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Your Message *</label>
+                        <textarea name="message" class="form-control" rows="4" placeholder="Write your message here..." required></textarea>
+                        <div class="invalid-feedback">Message body cannot be empty.</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<?php include 'includes/footer.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
