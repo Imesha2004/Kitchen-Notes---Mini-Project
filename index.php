@@ -1,3 +1,102 @@
+<?php
+require_once 'includes/db.php';
+require_once 'includes/functions.php';
+include 'includes/header.php';
+
+// Fetch recipes from DB using Prepared Statement
+try {
+    $stmt = $pdo->query("SELECT r.*, u.username FROM recipes r JOIN users u ON r.user_id = u.id ORDER BY r.id DESC");
+    $recipes = $stmt->fetchAll();
+} catch (Exception $e) {
+    $recipes = [];
+}
+?>
+
+<main class="container py-4">
+    <!-- Hero / Rotator Section (Wireframe Blueprint 1) -->
+    <section class="hero-section text-center my-3">
+        <h1 class="display-5 fw-bold text-dark mb-2">What's cooking today?</h1>
+        <p class="lead text-muted mb-4">Discover, save, and share your favorite dishes.</p>
+
+        <!-- Search Bar -->
+        <div class="search-box-container mb-4">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0 rounded-start-pill ps-3">
+                    <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                </span>
+                <input type="text" id="recipeSearchInput" class="form-control search-input-lg border-start-0 rounded-end-pill" placeholder="Search Bar: search by title or category...">
+            </div>
+        </div>
+
+        <!-- Featured Image Rotator / Carousel Slider (JS Feature) -->
+        <div id="recipeCarousel" class="carousel slide rotator-banner shadow-sm mb-4" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#recipeCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#recipeCarousel" data-bs-slide-to="1"></button>
+            </div>
+            <div class="carousel-inner rounded-3" style="max-height: 260px;">
+                <div class="carousel-item active bg-secondary text-white py-5" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80') center/cover;">
+                    <div class="py-4">
+                        <h3 class="fw-bold">Explore Handpicked Gourmet Recipes</h3>
+                        <p>Share your culinary creations with the community</p>
+                    </div>
+                </div>
+                <div class="carousel-item bg-dark text-white py-5" style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1200&q=80') center/cover;">
+                    <div class="py-4">
+                        <h3 class="fw-bold">Easy 15-Minute Meals for Busy Home Cooks</h3>
+                        <p>Filter by prep time and dietary preferences</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#recipeCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#recipeCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Quick-Toggle Category Filter Chips (Wireframe 1) -->
+    <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 mb-4">
+        <button class="filter-chip active" data-category="All">All</button>
+        <button class="filter-chip" data-category="Italian">Italian</button>
+        <button class="filter-chip" data-category="Breakfast">Breakfast</button>
+        <button class="filter-chip" data-category="Asian">Asian</button>
+        <button class="filter-chip" data-category="Dessert">Dessert</button>
+    </div>
+
+    <!-- Dynamic 3-Column Recipe Grid -->
+    <div class="recipe-grid" id="recipeContainer">
+        <?php if (!empty($recipes)): ?>
+            <?php foreach ($recipes as $r): ?>
+                <div class="recipe-card recipe-card-item" data-title="<?= htmlspecialchars($r['title']) ?>" data-category="<?= htmlspecialchars($r['category']) ?>">
+                    <div class="recipe-img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" alt="Recipe Image">
+                        <span class="badge-time"><i class="fa-regular fa-clock me-1"></i> <?= $r['cook_time'] ?> min</span>
+                    </div>
+                    <div class="p-3">
+                        <span class="badge bg-light text-primary border mb-2"><?= htmlspecialchars($r['category']) ?></span>
+                        <h5 class="fw-bold text-dark mb-1"><?= htmlspecialchars($r['title']) ?></h5>
+                        <p class="text-muted small mb-3"><?= htmlspecialchars(substr($r['short_description'], 0, 85)) ?>...</p>
+                        <div class="d-flex align-items-center justify-content-between pt-2 border-top">
+                            <span class="small text-secondary"><i class="fa-solid fa-user-ninja me-1"></i> <?= htmlspecialchars($r['username']) ?></span>
+                            <span class="small text-primary fw-semibold">Servings: <?= $r['servings'] ?></span>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No recipes found in the database. Be the first to share one!</p>
+                <a href="add_recipe.php" class="btn btn-primary rounded-pill px-4">Add Recipe</a>
+            </div>
+        <?php endif; ?>
+    </div>
+</main>
+
+<?php include 'includes/footer.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
