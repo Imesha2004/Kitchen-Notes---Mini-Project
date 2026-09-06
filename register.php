@@ -1,3 +1,86 @@
+<?php
+require_once '../includes/db.php';
+require_once '../includes/functions.php';
+
+$error = '';
+$success = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = sanitize_input($_POST['username'] ?? '');
+    $email = sanitize_input($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    if (!empty($username) && !empty($email) && !empty($password)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Hash password securely with PASSWORD_BCRYPT (Requirement)
+            $hashed_password = password_hash($password, PASSWORD_BCRYPT);
+
+            try {
+                // Prepared statement to prevent SQL injection
+                $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+                $stmt->execute([$username, $email, $hashed_password]);
+
+                $success = "Registration successful! You can now log in.";
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) {
+                    $error = "Username or Email already exists.";
+                } else {
+                    $error = "Registration failed: " . $e->getMessage();
+                }
+            }
+        } else {
+            $error = "Invalid email format.";
+        }
+    } else {
+        $error = "Please fill in all fields.";
+    }
+}
+
+include '../includes/header.php';
+?>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="form-card shadow-sm">
+                <h3 class="fw-bold mb-1 text-center">Create Account</h3>
+                <p class="text-muted small text-center mb-4">Join Kitchen Notes community today</p>
+
+                <?php if ($success): ?>
+                    <div class="alert alert-success"><?= $success ?> <a href="login.php" class="fw-bold">Login here</a></div>
+                <?php endif; ?>
+
+                <?php if ($error): ?>
+                    <div class="alert alert-danger"><?= $error ?></div>
+                <?php endif; ?>
+
+                <form action="register.php" method="POST" class="needs-js-validation">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Username</label>
+                        <input type="text" name="username" class="form-control" placeholder="e.g. imesha2004" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email Address</label>
+                        <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">Sign Up</button>
+                </form>
+
+                <p class="small text-center text-muted mt-3 mb-0">Already have an account? <a href="login.php" class="text-primary fw-semibold">Login</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<?php include '../includes/footer.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

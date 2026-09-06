@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> d33f2077e7d11852004c4af311a1e4aa9c1fedab
 <!DOCTYPE html>
 <html lang="en">
 <head>

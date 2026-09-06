@@ -1,3 +1,72 @@
+<?php
+require_once 'includes/db.php';
+require_once 'includes/functions.php';
+
+// Fetch profile or logged-in user info
+$user = get_logged_user($pdo);
+$username = $user ? $user['username'] : 'Amalka Udayasiri';
+$bio = $user['bio'] ?? 'Home Cook · 45 recipes published';
+
+// Fetch recipes
+try {
+    $stmt = $pdo->query("SELECT * FROM recipes ORDER BY id DESC");
+    $recipes = $stmt->fetchAll();
+} catch (Exception $e) {
+    $recipes = [];
+}
+
+include 'includes/header.php';
+?>
+
+<main class="container py-4">
+    <!-- User Profile Header Card (Wireframe Blueprint 2) -->
+    <div class="profile-card mb-4">
+        <div class="d-flex flex-column flex-md-row align-items-center gap-4">
+            <div class="avatar-placeholder shadow-sm">
+                <?= strtoupper(substr($username, 0, 1)) ?>
+            </div>
+            <div class="flex-grow-1 text-center text-md-start">
+                <h3 class="fw-bold mb-1"><?= htmlspecialchars($username) ?></h3>
+                <p class="text-muted mb-2"><i class="fa-solid fa-cookie-bite text-warning me-1"></i> <?= htmlspecialchars($bio) ?></p>
+                <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-4 text-dark fw-semibold mt-3">
+                    <div><span class="fs-5 fw-bold text-primary"><?= count($recipes) + 44 ?></span> <span class="text-muted small">Recipes</span></div>
+                    <div><span class="fs-5 fw-bold text-primary">128</span> <span class="text-muted small">Favorites</span></div>
+                    <div><span class="fs-5 fw-bold text-primary">1.2k</span> <span class="text-muted small">Followers</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs Navigation Bar (Wireframe 2) -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between border-bottom pb-3 mb-4">
+        <div class="d-flex gap-2">
+            <button class="filter-chip active me-2">My Recipes</button>
+            <button class="filter-chip me-2">Favorites</button>
+            <a href="contact.php" class="filter-chip text-decoration-none">Contact</a>
+        </div>
+        <a href="index.php" class="text-decoration-none text-primary fw-semibold small">View All <i class="fa-solid fa-arrow-right ms-1"></i></a>
+    </div>
+
+    <!-- Grid matching Wireframe 2 -->
+    <div class="recipe-grid">
+        <?php foreach ($recipes as $r): ?>
+            <div class="recipe-card">
+                <div class="recipe-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80" alt="Recipe preview">
+                    <span class="badge-time"><?= $r['cook_time'] ?> min</span>
+                </div>
+                <div class="p-3">
+                    <span class="badge bg-light text-primary border mb-2"><?= htmlspecialchars($r['category']) ?></span>
+                    <h5 class="fw-bold mb-1"><?= htmlspecialchars($r['title']) ?></h5>
+                    <p class="text-muted small mb-3"><?= htmlspecialchars($r['short_description']) ?></p>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</main>
+
+<?php include 'includes/footer.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
